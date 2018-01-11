@@ -135,24 +135,32 @@ abstract class _PikadayComponentBase implements AfterViewInit {
   /// <DateTime> or <String> with format YYYY-MM-DD. Forwards to [PikadayOptions.minDate]. Look there for more info.
   @Input()
   void set minDate(minDate) {
-    final minDateAsDateTime = dayValue(minDate);
-    if (_isInitPhase) {
-      _options.minDate = minDateAsDateTime;
+    if (minDate == null || minDate == "") {
+      _options.minDate = null;
     } else {
-      var minDateMillies = minDateAsDateTime?.millisecondsSinceEpoch;
-      setPikadayMinDateAsMillisecondsSinceEpoch(_pikaday, minDateMillies);
+      final minDateAsDateTime = dayValue(minDate);
+      if (_isInitPhase) {
+        _options.minDate = minDateAsDateTime;
+      } else {
+        var minDateMillies = minDateAsDateTime?.millisecondsSinceEpoch;
+        setPikadayMinDateAsMillisecondsSinceEpoch(_pikaday, minDateMillies);
+      }
     }
   }
 
   /// <DateTime> or <String> with format YYYY-MM-DD. Forwards to [PikadayOptions.maxDate]. Look there for more info.
   @Input()
   void set maxDate(maxDate) {
-    final maxDateAsDateTime = dayValue(maxDate);
-    if (_isInitPhase) {
-      _options.maxDate = maxDateAsDateTime;
+    if (maxDate == null || maxDate == "") {
+      _options.maxDate = null;
     } else {
-      var maxDateMillies = maxDateAsDateTime?.millisecondsSinceEpoch;
-      setPikadayMaxDateAsMillisecondsSinceEpoch(_pikaday, maxDateMillies);
+      final maxDateAsDateTime = dayValue(maxDate);
+      if (_isInitPhase) {
+        _options.maxDate = maxDateAsDateTime;
+      } else {
+        var maxDateMillies = maxDateAsDateTime?.millisecondsSinceEpoch;
+        setPikadayMaxDateAsMillisecondsSinceEpoch(_pikaday, maxDateMillies);
+      }
     }
   }
 
