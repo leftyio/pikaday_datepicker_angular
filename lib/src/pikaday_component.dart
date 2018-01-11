@@ -22,11 +22,8 @@ import 'conversion.dart';
 @Component(
     selector: 'pikaday',
     template:
-        '<input type="text" id="{{id}}" class="{{cssClasses}}" placeholder="{{placeholder}}">')
-class PikadayComponent implements AfterViewInit {
-  static int _componentCounter = 0;
-  final String id = "pikadayInput${++_componentCounter}";
-
+        '<input type="text" #input [attr.class]="cssClasses" [attr.placeholder]="placeholder">')
+class PikadayComponent extends _PikadayComponentBase {
   /// css-classes to be set on the pikaday-inputfield via <input class="{{cssClasses}}>
   @Input()
   String cssClasses = "";
@@ -35,13 +32,61 @@ class PikadayComponent implements AfterViewInit {
   @Input()
   String placeholder;
 
+  @ViewChild("input")
+  ElementRef inputRef;
+
+  @override
+  void ngAfterViewInit() {
+    _options.field = inputRef.nativeElement;
+    super.ngAfterViewInit();
+  }
+}
+
+@Component(
+    selector: 'pikaday-inline',
+    template: '''
+    <input type="text" #input hidden/>
+    <div [attr.class]="containerClasses" #container></div>
+    ''',
+    styles: const [":host { display: inline-block}"])
+class PikadayInlineDirective extends _PikadayComponentBase {
+  /// css-classes to be set on the pikaday-container via <div class="{{containerClasses}}>
+  @Input()
+  String containerClasses = "";
+
+  @Input("linkedInput")
+  var linkedInput;
+
+  @ViewChild("input")
+  ElementRef inputRef;
+
+  @ViewChild("container")
+  ElementRef containerRef;
+
+  @override
+  void ngAfterViewInit() {
+    bound = false;
+    if (linkedInput is HtmlElement) {
+      _options.field = linkedInput;
+    } else if (linkedInput is String && linkedInput.isEmpty) {
+      _options.field = document.getElementById(linkedInput);
+    } else {
+      _options.field = inputRef.nativeElement;
+    }
+    _options.container = containerRef.nativeElement;
+    super.ngAfterViewInit();
+  }
+}
+
+abstract class _PikadayComponentBase implements AfterViewInit {
   Pikaday _pikaday;
-  final _options = new PikadayOptions();
+  final PikadayOptions _options = new PikadayOptions();
 
   bool get _isInitPhase => _pikaday == null;
 
   /// Emits selected dates.
   final _dayChange = new StreamController<DateTime>();
+
   @Output()
   Stream<DateTime> get dayChange => _dayChange.stream;
 
@@ -50,7 +95,7 @@ class PikadayComponent implements AfterViewInit {
   void set day(DateTime day) {
     if (_isInitPhase) {
       _options.defaultDate = day;
-      _options.setDefaultDate = day!=null;
+      _options.setDefaultDate = day != null;
     } else {
       var dayMillies = day?.millisecondsSinceEpoch;
       setPikadayMillisecondsSinceEpoch(_pikaday, dayMillies);
@@ -185,8 +230,7 @@ class PikadayComponent implements AfterViewInit {
   }
 
   @override
-  ngAfterViewInit() {
-    _options.field = querySelector('#$id');
+  void ngAfterViewInit() {
     _options.onSelect = allowInterop((dateTimeOrDate) {
       var day = dateTimeOrDate is DateTime
           ? dateTimeOrDate
@@ -208,21 +252,21 @@ class PikadayComponent implements AfterViewInit {
       DateTime minDate,
       DateTime maxDate,
     ) {
-      if(day!=null) {
+      if (day != null) {
         var millies = day.millisecondsSinceEpoch;
         setPikadayMillisecondsSinceEpoch(_pikaday, millies);
       }
-      if(minDate!=null) {
+      if (minDate != null) {
         var millies = minDate.millisecondsSinceEpoch;
         setPikadayMinDateAsMillisecondsSinceEpoch(_pikaday, millies);
       }
-      if(maxDate!=null) {
+      if (maxDate != null) {
         var millies = maxDate.millisecondsSinceEpoch;
         setPikadayMaxDateAsMillisecondsSinceEpoch(_pikaday, millies);
       }
     }
+
     workaroundDateTimeConversionIssue(
-      _options.defaultDate, _options.minDate, _options.maxDate
-    );
+        _options.defaultDate, _options.minDate, _options.maxDate);
   }
 }

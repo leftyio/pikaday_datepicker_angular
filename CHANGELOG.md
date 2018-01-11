@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.0
+
+- Added inline date picker
+
 ## 3.0.1 - 2017-10-24
 
 - commented out dart_to_js_script_rewriter from standard transformer section
