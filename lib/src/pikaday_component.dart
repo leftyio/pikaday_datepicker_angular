@@ -22,7 +22,7 @@ import 'conversion.dart';
 @Component(
     selector: 'pikaday',
     template:
-        '<input type="text" #input class="{{cssClasses}}" placeholder="{{placeholder}}">')
+        '<input type="text" #input [attr.class]="cssClasses" [attr.placeholder]="placeholder">')
 class PikadayComponent extends _PikadayComponentBase {
   /// css-classes to be set on the pikaday-inputfield via <input class="{{cssClasses}}>
   @Input()
@@ -46,7 +46,7 @@ class PikadayComponent extends _PikadayComponentBase {
     selector: 'pikaday-inline',
     template: '''
     <input type="text" #input hidden/>
-    <div class="{{containerClasses}}" #container></div>
+    <div [attr.class]="containerClasses" #container></div>
     ''',
     styles: const [":host { display: inline-block}"])
 class PikadayInlineDirective extends _PikadayComponentBase {
