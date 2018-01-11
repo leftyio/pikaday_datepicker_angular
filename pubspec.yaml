@@ -1,6 +1,6 @@
 name: pikaday_datepicker_angular
 description: Provides a datepicker for Angular4 component which wrapps the lightweight pikaday js-library.
-version: 3.0.1
+version: 3.1.0
 author: Stephan Schroeder <simon.void+github@gmail.com>
 homepage: https://github.com/simon-void/pikaday_datepicker_angular
 
