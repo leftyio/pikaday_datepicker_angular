@@ -97,8 +97,7 @@ abstract class _PikadayComponentBase implements AfterViewInit {
       _options.defaultDate = day;
       _options.setDefaultDate = day != null;
     } else {
-      var dayMillies = day?.millisecondsSinceEpoch;
-      setPikadayMillisecondsSinceEpoch(_pikaday, dayMillies);
+      _pikaday.setDate(day);
     }
   }
 
@@ -142,8 +141,7 @@ abstract class _PikadayComponentBase implements AfterViewInit {
       if (_isInitPhase) {
         _options.minDate = minDateAsDateTime;
       } else {
-        var minDateMillies = minDateAsDateTime?.millisecondsSinceEpoch;
-        setPikadayMinDateAsMillisecondsSinceEpoch(_pikaday, minDateMillies);
+        _pikaday.setMinDate(minDateAsDateTime);
       }
     }
   }
@@ -158,8 +156,7 @@ abstract class _PikadayComponentBase implements AfterViewInit {
       if (_isInitPhase) {
         _options.maxDate = maxDateAsDateTime;
       } else {
-        var maxDateMillies = maxDateAsDateTime?.millisecondsSinceEpoch;
-        setPikadayMaxDateAsMillisecondsSinceEpoch(_pikaday, maxDateMillies);
+        _pikaday.setMaxDate(maxDateAsDateTime);
       }
     }
   }
@@ -240,7 +237,7 @@ abstract class _PikadayComponentBase implements AfterViewInit {
   @override
   void ngAfterViewInit() {
     _options.onSelect = allowInterop((dateTimeOrDate) {
-      var day = dateTimeOrDate is DateTime
+      final day = dateTimeOrDate is DateTime
           ? dateTimeOrDate
           : new DateTime.fromMillisecondsSinceEpoch(
               getPikadayMillisecondsSinceEpoch(_pikaday));
@@ -261,15 +258,15 @@ abstract class _PikadayComponentBase implements AfterViewInit {
       DateTime maxDate,
     ) {
       if (day != null) {
-        var millies = day.millisecondsSinceEpoch;
+        final millies = day.millisecondsSinceEpoch;
         setPikadayMillisecondsSinceEpoch(_pikaday, millies);
       }
       if (minDate != null) {
-        var millies = minDate.millisecondsSinceEpoch;
+        final millies = minDate.millisecondsSinceEpoch;
         setPikadayMinDateAsMillisecondsSinceEpoch(_pikaday, millies);
       }
       if (maxDate != null) {
-        var millies = maxDate.millisecondsSinceEpoch;
+        final millies = maxDate.millisecondsSinceEpoch;
         setPikadayMaxDateAsMillisecondsSinceEpoch(_pikaday, millies);
       }
     }
