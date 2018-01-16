@@ -68,7 +68,7 @@ class PikadayInlineDirective extends _PikadayComponentBase {
     bound = false;
     if (linkedInput is HtmlElement) {
       _options.field = linkedInput;
-    } else if (linkedInput is String && linkedInput.isEmpty) {
+    } else if (linkedInput is String && linkedInput.isNotEmpty) {
       _options.field = document.getElementById(linkedInput);
     } else {
       _options.field = inputRef.nativeElement;
