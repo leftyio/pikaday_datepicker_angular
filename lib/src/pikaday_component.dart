@@ -97,7 +97,12 @@ abstract class _PikadayComponentBase implements AfterViewInit {
       _options.defaultDate = day;
       _options.setDefaultDate = day != null;
     } else {
-      _pikaday.setDate(day);
+      if (day == null) {
+        _pikaday.setDate(null);
+      } else {
+        final dayMillies = day?.millisecondsSinceEpoch;
+        setPikadayMillisecondsSinceEpoch(_pikaday, dayMillies);
+      }
     }
   }
 
@@ -141,7 +146,12 @@ abstract class _PikadayComponentBase implements AfterViewInit {
       if (_isInitPhase) {
         _options.minDate = minDateAsDateTime;
       } else {
-        _pikaday.setMinDate(minDateAsDateTime);
+        if (minDate == null) {
+          _pikaday.setMinDate(null);
+        } else {
+          final minDateMillies = minDateAsDateTime?.millisecondsSinceEpoch;
+          setPikadayMinDateAsMillisecondsSinceEpoch(_pikaday, minDateMillies);
+        }
       }
     }
   }
@@ -156,7 +166,12 @@ abstract class _PikadayComponentBase implements AfterViewInit {
       if (_isInitPhase) {
         _options.maxDate = maxDateAsDateTime;
       } else {
-        _pikaday.setMaxDate(maxDateAsDateTime);
+        if (maxDate == null) {
+          _pikaday.setMaxDate(null);
+        } else {
+          final maxDateMillies = maxDateAsDateTime?.millisecondsSinceEpoch;
+          setPikadayMaxDateAsMillisecondsSinceEpoch(_pikaday, maxDateMillies);
+        }
       }
     }
   }
