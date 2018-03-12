@@ -16,10 +16,9 @@ analyzer:
   strong-mode: true
 
 # forwards compatible (you need this)
-analyzer:
   plugins:
     angular:
-      enabled: true
+      enabled: true  
 
 # backwards compatible (you also need this, for the moment)
 plugins:
