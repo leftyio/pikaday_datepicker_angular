@@ -4,8 +4,7 @@ import 'dart:html';
 import 'package:angular/angular.dart';
 import 'package:js/js.dart';
 import 'package:pikaday/pikaday.dart';
-import 'package:pikaday/pikaday_dart_helpers.dart';
-
+import 'helpers.dart';
 import 'conversion.dart';
 
 /// AngularDart component wrapper around the Pikaday-js lib. You will have to
@@ -22,7 +21,7 @@ import 'conversion.dart';
 @Component(
     selector: 'pikaday',
     template:
-        '<input type="text" #input [attr.class]="cssClasses" [attr.placeholder]="placeholder">')
+    '<input type="text" #input [attr.class]="cssClasses" [attr.placeholder]="placeholder">')
 class PikadayComponent extends _PikadayComponentBase {
   /// css-classes to be set on the pikaday-inputfield via <input class="{{cssClasses}}>
   @Input()
@@ -33,22 +32,19 @@ class PikadayComponent extends _PikadayComponentBase {
   String placeholder;
 
   @ViewChild("input")
-  ElementRef inputRef;
+  InputElement input;
 
   @override
-  void ngAfterViewInit() {
-    _options.field = inputRef.nativeElement;
-    super.ngAfterViewInit();
+  void ngOnInit() {
+    _options.field = input;
+    super.ngOnInit();
   }
 }
 
-@Component(
-    selector: 'pikaday-inline',
-    template: '''
-    <input type="text" #input hidden/>
+@Component(selector: 'pikaday-inline', template: '''
+    <input type="text" #input hidden readonly="readonly"/>
     <div [attr.class]="containerClasses" #container></div>
-    ''',
-    styles: const [":host { display: inline-block}"])
+    ''', styles: const [":host { display: inline-block}"])
 class PikadayInlineDirective extends _PikadayComponentBase {
   /// css-classes to be set on the pikaday-container via <div class="{{containerClasses}}>
   @Input()
@@ -58,27 +54,27 @@ class PikadayInlineDirective extends _PikadayComponentBase {
   var linkedInput;
 
   @ViewChild("input")
-  ElementRef inputRef;
+  InputElement input;
 
   @ViewChild("container")
-  ElementRef containerRef;
+  Element container;
 
   @override
-  void ngAfterViewInit() {
+  void ngOnInit() {
     bound = false;
     if (linkedInput is HtmlElement) {
       _options.field = linkedInput;
     } else if (linkedInput is String && linkedInput.isNotEmpty) {
       _options.field = document.getElementById(linkedInput);
     } else {
-      _options.field = inputRef.nativeElement;
+      _options.field = input;
     }
-    _options.container = containerRef.nativeElement;
-    super.ngAfterViewInit();
+    _options.container = container;
+    super.ngOnInit();
   }
 }
 
-abstract class _PikadayComponentBase implements AfterViewInit {
+abstract class _PikadayComponentBase implements OnInit, OnDestroy {
   Pikaday _pikaday;
   final PikadayOptions _options = new PikadayOptions();
 
@@ -249,13 +245,16 @@ abstract class _PikadayComponentBase implements AfterViewInit {
     _options.theme = theme;
   }
 
+  @Input()
+  bool disableKeyboard = false;
+
   @override
-  void ngAfterViewInit() {
+  void ngOnInit() {
     _options.onSelect = allowInterop((dateTimeOrDate) {
       final day = dateTimeOrDate is DateTime
           ? dateTimeOrDate
           : new DateTime.fromMillisecondsSinceEpoch(
-              getPikadayMillisecondsSinceEpoch(_pikaday));
+          getPikadayMillisecondsSinceEpoch(_pikaday));
 
       if (day != _options.defaultDate) {
         _options.defaultDate = day;
@@ -265,13 +264,17 @@ abstract class _PikadayComponentBase implements AfterViewInit {
 
     _pikaday = new Pikaday(_options);
 
+    _pikaday.hide();
+
+    if (disableKeyboard) {
+      disableKeydown(_pikaday);
+    }
+
     // Currently Dart's DateTime is not correctly mapped to JS's Date
     // so they are converted to millies as transferred as int values.
-    workaroundDateTimeConversionIssue(
-      DateTime day,
-      DateTime minDate,
-      DateTime maxDate,
-    ) {
+    workaroundDateTimeConversionIssue(DateTime day,
+        DateTime minDate,
+        DateTime maxDate,) {
       if (day != null) {
         final millies = day.millisecondsSinceEpoch;
         setPikadayMillisecondsSinceEpoch(_pikaday, millies);
@@ -288,5 +291,18 @@ abstract class _PikadayComponentBase implements AfterViewInit {
 
     workaroundDateTimeConversionIssue(
         _options.defaultDate, _options.minDate, _options.maxDate);
+  }
+
+  @override
+  void ngOnDestroy() {
+    _pikaday?.destroy();
+  }
+
+  void show() {
+    _pikaday.show();
+  }
+
+  void hide() {
+    _pikaday.hide();
   }
 }
