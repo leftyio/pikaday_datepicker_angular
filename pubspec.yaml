@@ -5,16 +5,16 @@ author: Stephan Schroeder <simon.void+github@gmail.com>
 homepage: https://github.com/simon-void/pikaday_datepicker_angular
 
 environment:
-  sdk: '>=1.24.0 <2.0.0'
+  sdk: '>=2.0.0-dev.65.0 <2.0.0'
 
 dependencies:
-  angular: ^5.0.0-alpha+9
+  angular: ^5.0.0-beta
   js: ^0.6.1
   pikaday: "^1.2.0"
 
 dev_dependencies:
-  build: '>=0.11.1 <0.13.0'
-  build_runner: ^0.8.1
-  build_test: ^0.10.1+1
-  build_web_compilers: ^0.3.5
-  sass_builder: ^1.1.5
+  build: '>=0.11.1 <1.0.0'
+  build_runner: '>=0.8.0 <1.0.0'
+  build_test: '>=0.10.0 <1.0.0'
+  build_web_compilers: '>=0.4.0 <1.0.0'
+  sass_builder: ^2.0.1

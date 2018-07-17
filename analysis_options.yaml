@@ -13,7 +13,6 @@
 #     - hash_and_equals
 
 analyzer:
-  strong-mode: true
 
 # forwards compatible (you need this)
   plugins:

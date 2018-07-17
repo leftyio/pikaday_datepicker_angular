@@ -3,7 +3,7 @@ import 'package:angular/angular.dart';
 import 'package:pikaday_datepicker_angular/pikaday_datepicker_angular.dart';
 
 void main() {
-  bootstrap(AppComponent);
+  bootstrapStatic(AppComponent);
 }
 
 // example app to showcase the PikadayComponent.
