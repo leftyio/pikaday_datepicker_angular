@@ -10,10 +10,13 @@ int intValue(intOrString) {
 }
 
 int parseInt(String intStr, [int defaultValue]) {
-  return int.parse(intStr,
-      onError: (s) => defaultValue != null
-          ? defaultValue
-          : throw new ArgumentError("couldn't convert to int: $intStr"));
+  final val = int.tryParse(intStr);
+
+  if (val == null) {
+    throw new ArgumentError("couldn't convert to int: $intStr");
+  }
+
+  return val;
 }
 
 bool boolValue(boolOrString) {

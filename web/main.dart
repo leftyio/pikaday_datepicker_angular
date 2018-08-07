@@ -3,7 +3,7 @@ import 'package:angular/angular.dart';
 import 'package:pikaday_datepicker_angular/pikaday_datepicker_angular.dart';
 
 void main() {
-  bootstrap(AppComponent);
+  bootstrapStatic(AppComponent);
 }
 
 // example app to showcase the PikadayComponent.
@@ -36,7 +36,7 @@ void main() {
 <button (click)="clear()">clear</button>
                  ''',
     directives: const [PikadayComponent, PikadayInlineDirective],
-    pipes: const [COMMON_PIPES])
+    pipes: const [commonPipes])
 class AppComponent {
   DateTime selectedDay = new DateTime(2015, 2, 1);
   DateTime selectedDayInline = new DateTime(2015, 2, 1);
