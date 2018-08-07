@@ -5,12 +5,13 @@ author: Stephan Schroeder <simon.void+github@gmail.com>
 homepage: https://github.com/simon-void/pikaday_datepicker_angular
 
 environment:
-  sdk: '>=2.0.0-dev.65.0 <2.0.0'
+  sdk: '>=2.0.0-dev.65.0 <3.0.0'
 
 dependencies:
-  angular: ^5.0.0-beta
+  angular: ^5.0.0
   js: ^0.6.1
-  pikaday: "^1.2.0"
+  pikaday:
+    git: https://github.com/leftyio/pikaday-dart.git
 
 dev_dependencies:
   build: '>=0.11.1 <1.0.0'
